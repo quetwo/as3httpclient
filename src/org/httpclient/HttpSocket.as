@@ -9,20 +9,17 @@ package org.httpclient {
   
   import flash.net.Socket;
   import flash.utils.ByteArray;
-  import flash.utils.Timer;
-  
+
   import flash.events.Event;
   import flash.events.EventDispatcher;
   import flash.events.IOErrorEvent;
   import flash.events.SecurityErrorEvent;
   import flash.events.ProgressEvent;  
   import flash.errors.EOFError;
-  import flash.events.TimerEvent;
-  
+
   import org.httpclient.io.HttpRequestBuffer;
   import org.httpclient.io.HttpResponseBuffer;
-  import org.httpclient.io.HttpBuffer;
-  
+
   import org.httpclient.events.*;
       
   /**
@@ -73,7 +70,10 @@ package org.httpclient {
      * Create Socket or TLSSocket depending on URI scheme (http or https).
      */
     protected function createSocket(secure:Boolean = false):void {      
-      if (secure && !_proxy) _socket = new TLSSocket();
+      if (secure && !_proxy)
+      {
+          _socket = new TLSSocket();
+      }
       else _socket = new Socket();
       
       _socket.addEventListener(Event.CONNECT, onConnect);       
@@ -205,10 +205,8 @@ package org.httpclient {
     protected function sendRequest(uri:URI, request:HttpRequest):void {               
       // Prepare response buffer
       _responseBuffer = new HttpResponseBuffer(request.hasResponseBody, onResponseHeader, onResponseData, onResponseComplete);
-      
       Log.debug("Request URI: " + uri + " (" + request.method + ")");
       var headerBytes:ByteArray = request.getHeader(uri, _proxy, HTTP_VERSION);
-      
       // Debug
       Log.debug("Header:\n" + headerBytes.readUTFBytes(headerBytes.length));
       headerBytes.position = 0;
@@ -246,7 +244,7 @@ package org.httpclient {
      * Socket data available.
      */
     private function onSocketData(event:ProgressEvent):void {
-      while (_socket && _socket.connected && _socket.bytesAvailable) {        
+        while (_socket && _socket.connected && _socket.bytesAvailable) {
         _timer.reset();
         try {           
           
